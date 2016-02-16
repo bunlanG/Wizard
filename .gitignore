@@ -1,0 +1,16 @@
+## ignored files ##
+
+# compilated output dirs
+build/
+# log test
+log/
+
+# IDE files
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA Community
+.idea/
+*.iml
