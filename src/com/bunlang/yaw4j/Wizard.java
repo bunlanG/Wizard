@@ -25,7 +25,10 @@ import javax.swing.JDialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Stack;
 
 /**
  * .
@@ -41,8 +44,30 @@ public class Wizard extends JDialog {
 
     // WizardPage manager
     private HashMap<Integer, WizardPage> _pages;
+    private Stack<Integer> _historyPageId;
     private int _currIndexPage;
     private int _maxIndexPage;
+    private final ActionListener _pageManager = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if(actionEvent.getSource() instanceof JButton) {
+                JButton src = (JButton)actionEvent.getSource();
+
+                if(src == _nextBut) {
+                    next();
+                }
+                if(src == _backBut) {
+                    back();
+                }
+                if(src == _cancelBut) {
+                    cancel();
+                }
+                if(src == _finishBut) {
+                    finish();
+                }
+            }
+        }
+    };
 
     public Wizard() {
         super();
@@ -53,17 +78,22 @@ public class Wizard extends JDialog {
         Dimension padSpace = new Dimension(4,34);
 
         _pages = new HashMap<>();
+        _historyPageId = new Stack<>();
         _maxIndexPage = -1;
         _currIndexPage = 0;
 
         _nextBut = new JButton("Next");
         _nextBut.setPreferredSize(butDim);
+        _nextBut.addActionListener(_pageManager);
         _backBut = new JButton("Back");
         _backBut.setPreferredSize(butDim);
+        _backBut.addActionListener(_pageManager);
         _finishBut = new JButton("Finish");
         _finishBut.setPreferredSize(butDim);
+        _finishBut.addActionListener(_pageManager);
         _cancelBut = new JButton("Cancel");
         _cancelBut.setPreferredSize(butDim);
+        _cancelBut.addActionListener(_pageManager);
 
         Box b = Box.createHorizontalBox();
         b.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -85,6 +115,7 @@ public class Wizard extends JDialog {
     public void setVisible(boolean visible) {
         if(visible) {
             // Needs some verifications before showing the wizard
+            this.pack();
             System.out.println("CurrIndex : " + _currIndexPage + "/" + _maxIndexPage);
         }
 
@@ -116,8 +147,25 @@ public class Wizard extends JDialog {
         int nextPageId = nextPageId(_currIndexPage);
 
         if(nextPageId >= 0) {
+            _historyPageId.push(_currIndexPage);
             _currIndexPage = nextPageId;
             System.out.println("currIndexPage : " + _currIndexPage + "/" + _maxIndexPage);
         }
+    }
+
+    public void back() {
+        if(!_historyPageId.empty()) {
+            _currIndexPage = _historyPageId.pop();
+
+            System.out.println("currIndexPage : " + _currIndexPage + "/" + _maxIndexPage);
+        }
+    }
+
+    public void cancel() {
+        this.setVisible(false);
+    }
+
+    public void finish() {
+        this.setVisible(false);
     }
 }
