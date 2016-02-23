@@ -18,14 +18,14 @@
 
 package com.bunlang.yaw4j;
 
-import java.awt.Component;
+import javax.swing.JPanel;
 
 /**
  * .
  *
  * @author bunlang
  */
-public class WizardPage extends Component {
+public class WizardPage extends JPanel {
     public WizardPage() {
         super();
     }
