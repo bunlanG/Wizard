@@ -18,7 +18,13 @@
 
 package com.bunlang.yaw4j;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 
 /**
  * .
@@ -26,7 +32,41 @@ import javax.swing.JDialog;
  * @author bunlang
  */
 public class Wizard extends JDialog {
+    private JButton _nextBut;
+    private JButton _backBut;
+    private JButton _finishBut;
+    private JButton _cancelBut;
+
     public Wizard() {
         super();
+
+        Dimension butDim = new Dimension(90,26);
+        Dimension litSpace = new Dimension(2,34);
+        Dimension bigSpace = new Dimension(12,34);
+        Dimension padSpace = new Dimension(4,34);
+
+        _nextBut = new JButton("Next");
+        _nextBut.setPreferredSize(butDim);
+        _backBut = new JButton("Back");
+        _backBut.setPreferredSize(butDim);
+        _finishBut = new JButton("Finish");
+        _finishBut.setPreferredSize(butDim);
+        _cancelBut = new JButton("Cancel");
+        _cancelBut.setPreferredSize(butDim);
+
+        Box b = Box.createHorizontalBox();
+        b.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        b.add(Box.createGlue());
+        b.add(Box.createRigidArea(padSpace));
+        b.add(_backBut);
+        b.add(Box.createRigidArea(litSpace));
+        b.add(_nextBut);
+        b.add(Box.createRigidArea(bigSpace));
+        b.add(_finishBut);
+        b.add(Box.createRigidArea(litSpace));
+        b.add(_cancelBut);
+        b.add(Box.createRigidArea(padSpace));
+
+        this.add(b, BorderLayout.SOUTH);
     }
 }
