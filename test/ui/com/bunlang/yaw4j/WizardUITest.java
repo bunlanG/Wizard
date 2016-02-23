@@ -25,9 +25,20 @@ import org.junit.Test;
  *
  * @author bunlang
  */
-public class WizardTest {
+public class WizardUITest {
 
     @Test
-    public void lorem() {
+    public void uiTest() {
+        Wizard wiz = new Wizard();
+        wiz.setVisible(true);
+        wiz.pack();
+
+        while(wiz.isShowing()) {
+            try {
+                Thread.sleep(1000);
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }

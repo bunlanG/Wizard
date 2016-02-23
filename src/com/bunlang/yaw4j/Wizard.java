@@ -18,10 +18,15 @@
 
 package com.bunlang.yaw4j;
 
+import javax.swing.JDialog;
+
 /**
  * .
  *
  * @author bunlang
  */
-public class Wizard {
+public class Wizard extends JDialog {
+    public Wizard() {
+        super();
+    }
 }

@@ -157,6 +157,7 @@
     <target name="-choice-ui-test">
             <!-- Choose the UI test class to launch. It needs to be the complete class (with package) -->
         <echo>Availables UI :</echo>
+        <echo>    > com.bunlang.yaw4j.WizardUITest</echo>
         <input addProperty="test.Ui.class" />
     </target>
     <target name="-junit-ui-test" depends="build-ui-test">
