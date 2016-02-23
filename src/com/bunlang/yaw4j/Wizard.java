@@ -25,6 +25,7 @@ import javax.swing.JDialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.HashMap;
 
 /**
  * .
@@ -32,10 +33,14 @@ import java.awt.Dimension;
  * @author bunlang
  */
 public class Wizard extends JDialog {
+    // Ui
     private JButton _nextBut;
     private JButton _backBut;
     private JButton _finishBut;
     private JButton _cancelBut;
+
+    // WizardPage manager
+    private HashMap<Integer, WizardPage> _pages;
 
     public Wizard() {
         super();
@@ -44,6 +49,8 @@ public class Wizard extends JDialog {
         Dimension litSpace = new Dimension(2,34);
         Dimension bigSpace = new Dimension(12,34);
         Dimension padSpace = new Dimension(4,34);
+
+        _pages = new HashMap<>();
 
         _nextBut = new JButton("Next");
         _nextBut.setPreferredSize(butDim);
