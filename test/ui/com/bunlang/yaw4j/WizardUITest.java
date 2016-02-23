@@ -26,10 +26,25 @@ import org.junit.Test;
  * @author bunlang
  */
 public class WizardUITest {
+    private final WizardListener wl = new WizardListener() {
+        @Override
+        public void wizardUpdated(WizardEvent e) {
+            if(e.getSource() instanceof Wizard) {
+                Wizard wiz = (Wizard) e.getSource();
+
+                if(wiz.isAccepted()) {
+                    System.out.println("Finish");
+                } else {
+                    System.out.println("Cancel");
+                }
+            }
+        }
+    };
 
     @Test
     public void uiTest() {
         Wizard wiz = new Wizard();
+        wiz.addWizardListener(wl);
 
         wiz.addWizardPage(new WizardPage());
         wiz.addWizardPage(new WizardPage());
@@ -43,12 +58,6 @@ public class WizardUITest {
             } catch(InterruptedException ex) {
 
             }
-        }
-
-        if(wiz.isAccepted()) {
-            System.out.println("Finish");
-        } else {
-            System.out.println("Cancel");
         }
     }
 }

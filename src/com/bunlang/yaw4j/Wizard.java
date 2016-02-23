@@ -27,6 +27,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -41,6 +42,9 @@ public class Wizard extends JDialog {
     private JButton _backBut;
     private JButton _finishBut;
     private JButton _cancelBut;
+
+    // Observer pattern
+    private ArrayList<WizardListener> _observers;
 
     // WizardPage manager
     private HashMap<Integer, WizardPage> _pages;
@@ -82,6 +86,7 @@ public class Wizard extends JDialog {
 
         _pages = new HashMap<>();
         _historyPageId = new Stack<>();
+        _observers = new ArrayList<>();
         _maxIndexPage = -1;
         _currIndexPage = 0;
         _accepted = false;
@@ -168,14 +173,35 @@ public class Wizard extends JDialog {
     public void cancel() {
         _accepted = false;
         this.setVisible(false);
+        updateListeners();
     }
 
     public void finish() {
         _accepted = true;
         this.setVisible(false);
+        updateListeners();
     }
 
     public boolean isAccepted() {
         return _accepted;
+    }
+
+    public void addWizardListener(WizardListener obs) {
+        _observers.add(obs);
+    }
+
+    public void removeWizardListener(WizardListener obs) {
+        _observers.remove(obs);
+    }
+
+    public void removeWizardListeners() {
+        _observers.clear();
+    }
+
+    protected void updateListeners() {
+        WizardEvent e = new WizardEvent(this);
+        for(WizardListener obs : _observers) {
+            obs.wizardUpdated(e);
+        }
     }
 }
