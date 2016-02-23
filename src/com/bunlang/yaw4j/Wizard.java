@@ -22,10 +22,12 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -44,6 +46,8 @@ public class Wizard extends JDialog {
     private JButton _finishBut;
     private JButton _cancelBut;
     private JPanel _content;
+    private JLabel _pageTitle;
+    private JLabel _pageSubtitle;
 
     // Observer pattern
     private ArrayList<WizardListener> _observers;
@@ -85,6 +89,7 @@ public class Wizard extends JDialog {
         Dimension litSpace = new Dimension(2,34);
         Dimension bigSpace = new Dimension(12,34);
         Dimension padSpace = new Dimension(4,34);
+        Font f = new Font("system", Font.PLAIN, 12);
 
         _pages = new HashMap<>();
         _historyPageId = new Stack<>();
@@ -107,20 +112,30 @@ public class Wizard extends JDialog {
         _cancelBut.setPreferredSize(butDim);
         _cancelBut.addActionListener(_pageManager);
 
-        Box b = Box.createHorizontalBox();
-        b.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        b.add(Box.createGlue());
-        b.add(Box.createRigidArea(padSpace));
-        b.add(_backBut);
-        b.add(Box.createRigidArea(litSpace));
-        b.add(_nextBut);
-        b.add(Box.createRigidArea(bigSpace));
-        b.add(_finishBut);
-        b.add(Box.createRigidArea(litSpace));
-        b.add(_cancelBut);
-        b.add(Box.createRigidArea(padSpace));
+        _pageTitle = new JLabel("Title");
+        _pageTitle.setFont(new Font(f.getFontName(), Font.BOLD, f.getSize()));
+        _pageSubtitle = new JLabel("Sub-title.");
+        _pageSubtitle.setFont(new Font(f.getFontName(), Font.PLAIN, f.getSize()));
 
-        this.add(b, BorderLayout.SOUTH);
+        Box bSouth = Box.createHorizontalBox();
+        bSouth.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        bSouth.add(Box.createGlue());
+        bSouth.add(Box.createRigidArea(padSpace));
+        bSouth.add(_backBut);
+        bSouth.add(Box.createRigidArea(litSpace));
+        bSouth.add(_nextBut);
+        bSouth.add(Box.createRigidArea(bigSpace));
+        bSouth.add(_finishBut);
+        bSouth.add(Box.createRigidArea(litSpace));
+        bSouth.add(_cancelBut);
+        bSouth.add(Box.createRigidArea(padSpace));
+
+        Box bNorth = Box.createVerticalBox();
+        bNorth.add(_pageTitle);
+        bNorth.add(_pageSubtitle);
+
+        this.add(bSouth, BorderLayout.SOUTH);
+        this.add(bNorth, BorderLayout.NORTH);
         this.add(_content);
     }
 
