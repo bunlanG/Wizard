@@ -20,6 +20,8 @@ package com.bunlang.yaw4j;
 
 import org.junit.Test;
 
+import javax.swing.JLabel;
+
 /**
  * .
  *
@@ -46,9 +48,16 @@ public class WizardUITest {
         Wizard wiz = new Wizard();
         wiz.addWizardListener(wl);
 
-        wiz.addWizardPage(new WizardPage());
-        wiz.addWizardPage(new WizardPage());
-        wiz.addWizardPage(new WizardPage());
+        WizardPage wp1 = new WizardPage();
+        wp1.add(new JLabel("First page"));
+        WizardPage wp2 = new WizardPage();
+        wp2.add(new JLabel("Another page"));
+        WizardPage wp3 = new WizardPage();
+        wp3.add(new JLabel("Last page"));
+
+        wiz.addWizardPage(wp1);
+        wiz.addWizardPage(wp2);
+        wiz.addWizardPage(wp3);
 
         wiz.setVisible(true);
 
