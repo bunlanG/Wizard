@@ -242,7 +242,12 @@ public class Wizard extends JDialog {
     }
 
     private void updatePage() {
+        String title = _pages.get(_currIndexPage).getTitle();
+        String subtitle = _pages.get(_currIndexPage).getSubtitle();
+
         _content.add(_pages.get(_currIndexPage));
+        _pageTitle.setText(title);
+        _pageSubtitle.setText(subtitle);
 
         this.pack();
     }

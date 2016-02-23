@@ -50,10 +50,16 @@ public class WizardUITest {
 
         WizardPage wp1 = new WizardPage();
         wp1.add(new JLabel("First page"));
+        wp1.setTitle("First page");
+        wp1.setSubtitle("First page.");
         WizardPage wp2 = new WizardPage();
         wp2.add(new JLabel("Another page"));
+        wp2.setTitle("Another page");
+        wp2.setSubtitle("Another page.");
         WizardPage wp3 = new WizardPage();
         wp3.add(new JLabel("Last page"));
+        wp3.setTitle("Last page");
+        wp3.setSubtitle("Last page.");
 
         wiz.addWizardPage(wp1);
         wiz.addWizardPage(wp2);
