@@ -41,8 +41,14 @@ public class WizardUITest {
             try {
                 Thread.sleep(1000);
             } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
+
             }
+        }
+
+        if(wiz.isAccepted()) {
+            System.out.println("Finish");
+        } else {
+            System.out.println("Cancel");
         }
     }
 }

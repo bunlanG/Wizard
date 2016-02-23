@@ -69,6 +69,9 @@ public class Wizard extends JDialog {
         }
     };
 
+    // Misc
+    private boolean _accepted;
+
     public Wizard() {
         super();
 
@@ -81,6 +84,7 @@ public class Wizard extends JDialog {
         _historyPageId = new Stack<>();
         _maxIndexPage = -1;
         _currIndexPage = 0;
+        _accepted = false;
 
         _nextBut = new JButton("Next");
         _nextBut.setPreferredSize(butDim);
@@ -162,10 +166,16 @@ public class Wizard extends JDialog {
     }
 
     public void cancel() {
+        _accepted = false;
         this.setVisible(false);
     }
 
     public void finish() {
+        _accepted = true;
         this.setVisible(false);
+    }
+
+    public boolean isAccepted() {
+        return _accepted;
     }
 }
