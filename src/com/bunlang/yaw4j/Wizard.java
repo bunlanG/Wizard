@@ -124,6 +124,7 @@ public class Wizard extends JDialog {
     public void setVisible(boolean visible) {
         if(visible) {
             // Needs some verifications before showing the wizard
+            updateNavButtons();
             this.pack();
             System.out.println("CurrIndex : " + _currIndexPage + "/" + _maxIndexPage);
         }
@@ -158,6 +159,7 @@ public class Wizard extends JDialog {
         if(nextPageId >= 0) {
             _historyPageId.push(_currIndexPage);
             _currIndexPage = nextPageId;
+            updateNavButtons();
             System.out.println("currIndexPage : " + _currIndexPage + "/" + _maxIndexPage);
         }
     }
@@ -165,7 +167,7 @@ public class Wizard extends JDialog {
     public void back() {
         if(!_historyPageId.empty()) {
             _currIndexPage = _historyPageId.pop();
-
+            updateNavButtons();
             System.out.println("currIndexPage : " + _currIndexPage + "/" + _maxIndexPage);
         }
     }
@@ -203,5 +205,22 @@ public class Wizard extends JDialog {
         for(WizardListener obs : _observers) {
             obs.wizardUpdated(e);
         }
+    }
+
+    protected boolean isFirstPage() {
+        return (_historyPageId.empty());
+    }
+
+    protected boolean isLastPage() {
+        return (nextPageId(_currIndexPage) == -1);
+    }
+
+    private void updateNavButtons() {
+        boolean lastPage = isLastPage();
+        boolean firstPage = isFirstPage();
+
+        _finishBut.setEnabled(lastPage);
+        _nextBut.setEnabled(!lastPage);
+        _backBut.setEnabled(!firstPage);
     }
 }
