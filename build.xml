@@ -1,0 +1,209 @@
+<?xml version="1.0" ?>
+<!-- Ant config file for yaw4j -->
+<project name="yaw4j" default="build-jar" basedir="." >
+    <description>
+        yaw4j build file for Ant.
+    </description>
+<!-- ============================= Properties ============================== -->
+    <property name="project.name" value="yaw4j" />
+    <property name="project.main.app" value="" />
+    <property name="project.dir.src.app" value="src" />
+    <property name="project.dir.src.test.ui" value="test/ui" />
+    <property name="project.dir.src.test" value="test/unit" />
+    <property name="project.dir.build" value="build" />
+    <property name="project.dir.build.app" value="build/prod" />
+    <property name="project.dir.build.javadoc" value="build/doc" />
+    <property name="project.dir.build.test" value="build/test/unit" />
+    <property name="project.dir.build.test.ui" value="build/test/ui" />
+    <property name="project.dir.log" value="log" />
+    <property name="project.dir.log.test" value="log/test-unit" />
+    <property name="project.dir.log.test.ui" value="log/test-ui" />
+    <property name="ant.build.javac.target" value="1.7" />
+    <property name="ant.build.javac.source" value="1.7" />
+
+<!-- ============================= Classpaths ============================== -->
+    <path id="project.cp.lib.junit4">
+        <pathelement location="lib/junit4.jar" />
+        <pathelement location="lib/hamcrest-all.jar" />
+    </path>
+    <path id="project.cp.lib.log4j">
+        <pathelement location="lib/log4j-1.2.jar" />
+    </path>
+    <path id="project.cp.prop">
+        <pathelement location="prop" />
+    </path>
+    <path id="project.cp.app">
+        <pathelement location="${project.dir.build.app}" />
+        <path refid="project.cp.lib.junit4" />
+        <path refid="project.cp.lib.log4j" />
+        <path refid="project.cp.prop" />
+    </path>
+    <path id="project.cp.test">
+        <path refid="project.cp.app" />
+        <pathelement location="${project.dir.build.test}" />
+    </path>
+    <path id="project.cp.test.unit">
+        <path refid="project.cp.app" />
+        <pathelement location="${project.dir.build.test.ui}" />
+    </path>
+
+<!-- =============================== Targets =============================== -->
+    <target name="help"
+            description="Show this help.">
+        <java classname="org.apache.tools.ant.Main">
+            <arg value="-projecthelp" />
+        </java>
+    </target>
+<!-- ....................................................................... -->
+    <target name="init"
+            description="Create folders for generated files.">
+        <mkdir dir="${project.dir.build}" />
+          <mkdir dir="${project.dir.build.javadoc}" />
+          <mkdir dir="${project.dir.build.app}" />
+          <mkdir dir="build/test" />
+            <mkdir dir="${project.dir.build.test.ui}" />
+            <mkdir dir="${project.dir.build.test}" />
+        <mkdir dir="${project.dir.log}" />
+          <mkdir dir="${project.dir.log.test.ui}" />
+          <mkdir dir="${project.dir.log.test}" />
+    </target>
+<!-- ....................................................................... -->
+    <target name="build-app" depends="init"
+            description="Build the main app.">
+        <javac srcdir="${project.dir.src.app}" destdir="${project.dir.build.app}" includeAntRuntime="false">
+            <classpath refid="project.cp.app" />
+        </javac>
+    </target>
+<!-- ....................................................................... -->
+    <target name="clean"
+            description="Clear ALL generated files.">
+        <delete dir="${project.dir.build}" />
+        <delete dir="${project.dir.log}" />
+    </target>
+<!-- ....................................................................... -->
+    <target name="build-unit-test" depends="build-app"
+            description="Build the unit tests.">
+        <javac srcdir="${project.dir.src.test}" destdir="${project.dir.build.test}" includeAntRuntime="false">
+            <classpath refid="project.cp.test" />
+        </javac>
+    </target>
+<!-- ....................................................................... -->
+    <target name="build-ui-test" depends="build-app"
+            description="Build the UI tests.">
+        <javac srcdir="${project.dir.src.test.ui}" destdir="${project.dir.build.test.ui}" includeAntRuntime="false">
+            <classpath refid="project.cp.test.unit" />
+        </javac>
+    </target>
+<!-- ....................................................................... -->
+    <target name="build-jar" depends="build-app"
+            description="Build the jar archive with the main app.">
+        <jar destfile="yaw4j.jar">
+            <fileset dir="${project.dir.build.app}"/>
+            <fileset dir="prop"/>
+            <zipfileset includes="**/*.class" src="lib/log4j-1.2.jar"/>
+            <manifest>
+            </manifest>
+        </jar>
+    </target>
+<!-- ....................................................................... -->
+    <target name="-clear-log-unit-test">
+            <!-- Clear log files from the previous unit tests. It avoids conflits in results. -->
+        <delete includeemptydirs="true">
+            <fileset dir="${project.dir.log.test}" includes="**/*"/>
+        </delete>
+        <echo>log/test-unit folder clean.</echo>
+    </target>
+    <target name="-junit-unit-test" depends="build-unit-test">
+            <!-- Launch all unit tests. -->
+        <junit printsummary="on" showoutput="on" fork="yes" failureproperty="test.unit.failed">
+            <classpath refid="project.cp.test" />
+            <batchtest todir="${project.dir.log.test}">
+                <fileset dir="${project.dir.src.test}">
+                    <include name="**/*Test*.java" />
+                </fileset>
+                <formatter type="xml" /> <!-- Required for JUnit Report -->
+            </batchtest>
+        </junit>
+    </target>
+    <target name="-junitreport-unit">
+            <!-- Build HTML files from unit tests, with XML logs from tests. -->
+        <junitreport todir="${project.dir.log.test}">
+            <fileset dir="${project.dir.log.test}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report format="frames" todir="${project.dir.log.test}" />
+        </junitreport>
+    </target>
+    <!-- -->
+    <target name="run-unit-test" depends="init,-clear-log-unit-test,-junit-unit-test,-junitreport-unit"
+            description="Run all unit tests.">
+        <fail message="Unit Tests FAILED" if="test.unit.failed" />
+    </target>
+<!-- ....................................................................... -->
+    <target name="show-report-unit-test"
+            description="Show the unit tests report in a browser.">
+        <exec executable="xdg-open">
+            <arg value="${project.dir.log.test}/index.html" />
+        </exec>
+    </target>
+<!-- ....................................................................... -->
+    <target name="-clear-log-ui-test">
+            <!-- Clear log files from the previous UI tests. It avoids conflits in results. -->
+        <delete includeemptydirs="true">
+            <fileset dir="${project.dir.log.test.ui}" includes="**/*"/>
+        </delete>
+        <echo>log/test-ui folder clean.</echo>
+    </target>
+    <target name="-choice-ui-test">
+            <!-- Choose the UI test class to launch. It needs to be the complete class (with package) -->
+        <echo>Availables UI :</echo>
+        <input addProperty="test.Ui.class" />
+    </target>
+    <target name="-junit-ui-test" depends="build-ui-test">
+            <!-- Launch all UI tests. -->
+        <junit printsummary="on" showoutput="on" fork="yes" failureproperty="test.ui.failed">
+			<classpath refid="project.cp.test.unit" />
+            <test name="${test.Ui.class}" todir="${project.dir.log.test.ui}">
+                <formatter type="xml" />
+            </test>
+        </junit>
+    </target>
+    <target name="-junitreport-ui">
+            <!-- Build HTML files from UI tests, with XML logs from tests. -->
+        <junitreport todir="${project.dir.log.test.ui}">
+            <fileset dir="${project.dir.log.test.ui}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report format="frames" todir="${project.dir.log.test.ui}" />
+        </junitreport>
+    </target>
+    <!-- -->
+	<target name="run-ui-test" depends="init,-clear-log-ui-test,-choice-ui-test,-junit-ui-test,-junitreport-ui"
+	        description="Run the UI test. You select before the test class.">
+        <fail message="UI Test FAILED" if="test.ui.failed" />
+    </target>
+<!-- ....................................................................... -->
+    <target name="show-report-ui-test"
+            description="Show the UI test report in a browser.">
+        <exec executable="xdg-open">
+            <arg value="${project.dir.log.test.ui}/index.html" />
+        </exec>
+    </target>
+<!-- ....................................................................... -->
+    <target name="build-javadoc" depends="init"
+            description="Build the JavaDoc.">
+        <javadoc destdir="${project.dir.build.javadoc}" classpathref="project.cp.test">
+            <fileset dir="${project.dir.src.app}">
+
+            </fileset>
+        </javadoc>
+    </target>
+<!-- ....................................................................... -->
+    <target name="show-javadoc"
+            description="Show the JavaDoc in a browser.">
+        <exec executable="xdg-open">
+            <arg value="${project.dir.build.javadoc}/index.html" />
+        </exec>
+    </target>
+<!-- ....................................................................... -->
+</project>
