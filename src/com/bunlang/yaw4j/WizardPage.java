@@ -26,7 +26,29 @@ import javax.swing.JPanel;
  * @author bunlang
  */
 public class WizardPage extends JPanel {
+    private String _title;
+    private String _subtitle;
+
     public WizardPage() {
         super();
+
+        _title = "";
+        _subtitle = "";
+    }
+
+    public String getTitle() {
+        return _title;
+    }
+
+    public void setTitle(String title) {
+        _title = title;
+    }
+
+    public String getSubtitle() {
+        return _subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        _subtitle = subtitle;
     }
 }
