@@ -41,6 +41,8 @@ public class Wizard extends JDialog {
 
     // WizardPage manager
     private HashMap<Integer, WizardPage> _pages;
+    private int _currIndexPage;
+    private int _maxIndexPage;
 
     public Wizard() {
         super();
@@ -51,6 +53,8 @@ public class Wizard extends JDialog {
         Dimension padSpace = new Dimension(4,34);
 
         _pages = new HashMap<>();
+        _maxIndexPage = -1;
+        _currIndexPage = 0;
 
         _nextBut = new JButton("Next");
         _nextBut.setPreferredSize(butDim);
@@ -75,5 +79,45 @@ public class Wizard extends JDialog {
         b.add(Box.createRigidArea(padSpace));
 
         this.add(b, BorderLayout.SOUTH);
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        if(visible) {
+            // Needs some verifications before showing the wizard
+            System.out.println("CurrIndex : " + _currIndexPage + "/" + _maxIndexPage);
+        }
+
+        super.setVisible(visible);
+    }
+
+    public void addWizardPage(WizardPage page) {
+        addWizardPage(_maxIndexPage + 1,page);
+    }
+
+    public void addWizardPage(int index, WizardPage page) {
+        _pages.put(index, page);
+
+        // Prepare the next add
+        if(index > _maxIndexPage) {
+            _maxIndexPage = index;
+        }
+    }
+
+    protected int nextPageId(int currPageId) {
+        if(currPageId < _maxIndexPage) {
+            return (currPageId + 1);
+        } else {
+            return -1;
+        }
+    }
+
+    public void next() {
+        int nextPageId = nextPageId(_currIndexPage);
+
+        if(nextPageId >= 0) {
+            _currIndexPage = nextPageId;
+            System.out.println("currIndexPage : " + _currIndexPage + "/" + _maxIndexPage);
+        }
     }
 }

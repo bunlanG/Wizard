@@ -30,8 +30,18 @@ public class WizardUITest {
     @Test
     public void uiTest() {
         Wizard wiz = new Wizard();
-        wiz.setVisible(true);
+
+        wiz.addWizardPage(new WizardPage());
+        wiz.addWizardPage(new WizardPage());
+        wiz.addWizardPage(new WizardPage());
+
         wiz.pack();
+        wiz.setVisible(true);
+
+        wiz.next();
+        wiz.next();
+        wiz.next();
+        wiz.next(); // Should do nothing...
 
         while(wiz.isShowing()) {
             try {
