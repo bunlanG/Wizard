@@ -2,6 +2,7 @@
 
 # compilated output dirs
 build/
+yaw4j.jar
 # log test
 log/
 
