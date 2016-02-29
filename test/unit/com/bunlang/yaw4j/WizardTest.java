@@ -18,7 +18,12 @@
 
 package com.bunlang.yaw4j;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import javax.swing.JLabel;
+
+import static org.junit.Assert.*;
 
 /**
  * .
@@ -27,7 +32,70 @@ import org.junit.Test;
  */
 public class WizardTest {
 
+    private final WizardListener wl = new WizardListener() {
+        @Override
+        public void wizardUpdated(WizardEvent e) {
+            if(e.getSource() instanceof Wizard) {
+                Wizard wiz = (Wizard) e.getSource();
+
+                if(wiz.isAccepted()) {
+                    System.out.println("Finish");
+                } else {
+                    System.out.println("Cancel");
+                }
+            }
+        }
+    };
+    private Wizard wiz;
+
+    @Before
+    public void setUp() {
+        wiz = new Wizard();
+        wiz.addWizardListener(wl);
+
+        WizardPage wp1 = new WizardPage();
+        wp1.add(new JLabel("First page"));
+        wp1.setTitle("First page");
+        wp1.setSubtitle("First page.");
+        WizardPage wp2 = new WizardPage();
+        wp2.add(new JLabel("Another page"));
+        wp2.setTitle("Another page");
+        wp2.setSubtitle("Another page.");
+        WizardPage wp3 = new WizardPage();
+        wp3.add(new JLabel("Last page"));
+        wp3.setTitle("Last page");
+        wp3.setSubtitle("Last page.");
+
+        wiz.addWizardPage(wp1);
+        wiz.addWizardPage(wp2);
+        wiz.addWizardPage(wp3);
+
+        wiz.setStartId(0);
+    }
+
     @Test
-    public void lorem() {
+    public void testAddWizardPage() {
+        assertTrue("Must have 3 pages", wiz.getPageIds().size() == 3);
+    }
+
+    @Test
+    public void testNextPrev() {
+        assertTrue("Must be 0", wiz.getCurrentId() == 0);
+        wiz.next();
+        assertTrue("Must be 1", wiz.getCurrentId() == 1);
+        wiz.next();
+        assertTrue("Must be 2", wiz.getCurrentId() == 2);
+        wiz.back();
+        assertTrue("Must be 1", wiz.getCurrentId() == 1);
+        wiz.back();
+        assertTrue("Must be 0", wiz.getCurrentId() == 0);
+    }
+
+    @Test
+    public void testCancelFinish() {
+        wiz.finish();
+        assertTrue("Must be accepted", wiz.isAccepted());
+        wiz.cancel();
+        assertFalse("Must not be accepted", wiz.isAccepted());
     }
 }
