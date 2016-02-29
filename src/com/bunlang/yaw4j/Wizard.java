@@ -97,6 +97,7 @@ public class Wizard extends JDialog {
         _historyPageId = new Stack<>();
         _observers = new ArrayList<>();
         _content = new JPanel();
+        _content.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         _maxIndexPage = -1;
         _currIndexPage = 0;
         _startIndexPage = 0;
@@ -134,6 +135,7 @@ public class Wizard extends JDialog {
         bSouth.add(Box.createRigidArea(padSpace));
 
         Box bNorth = Box.createVerticalBox();
+        bNorth.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         bNorth.add(_pageTitle);
         bNorth.add(_pageSubtitle);
 
