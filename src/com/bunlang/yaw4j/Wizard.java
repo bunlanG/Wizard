@@ -227,6 +227,10 @@ public class Wizard extends JDialog {
         return _currIndexPage;
     }
 
+    public WizardPage getCurrentPage() {
+        return _pages.get(_currIndexPage);
+    }
+
     protected void updateListeners() {
         WizardEvent e = new WizardEvent(this);
         for(WizardListener obs : _observers) {
