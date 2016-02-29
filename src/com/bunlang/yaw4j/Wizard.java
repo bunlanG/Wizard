@@ -57,6 +57,7 @@ public class Wizard extends JDialog {
     private Stack<Integer> _historyPageId;
     private int _currIndexPage;
     private int _maxIndexPage;
+    private int _startIndexPage;
     private final ActionListener _pageManager = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
@@ -97,6 +98,7 @@ public class Wizard extends JDialog {
         _content = new JPanel();
         _maxIndexPage = -1;
         _currIndexPage = 0;
+        _startIndexPage = 0;
         _accepted = false;
 
         _nextBut = new JButton("Next");
@@ -143,7 +145,7 @@ public class Wizard extends JDialog {
     public void setVisible(boolean visible) {
         if(visible) {
             // Needs some verifications before showing the wizard
-            updateCurrPageId(_currIndexPage);
+            updateCurrPageId(_startIndexPage);
             System.out.println("CurrIndex : " + _currIndexPage + "/" + _maxIndexPage);
         }
 
@@ -215,6 +217,10 @@ public class Wizard extends JDialog {
 
     public void removeWizardListeners() {
         _observers.clear();
+    }
+
+    public void setStartId(int startId) {
+        _startIndexPage = startId;
     }
 
     protected void updateListeners() {
