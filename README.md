@@ -1,4 +1,4 @@
-# Wizard : A Wizard for Java
+# yaw4j : Yet Another Wizard for Java
 
 I created this project because I could not find a easy-to-use Wizard in my opinion.
 
