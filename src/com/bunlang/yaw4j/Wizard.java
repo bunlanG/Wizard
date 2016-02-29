@@ -231,6 +231,10 @@ public class Wizard extends JDialog {
         return _pages.get(_currIndexPage);
     }
 
+    public Integer[] getPageIds() {
+        return (Integer[]) _pages.keySet().toArray();
+    }
+
     protected void updateListeners() {
         WizardEvent e = new WizardEvent(this);
         for(WizardListener obs : _observers) {
