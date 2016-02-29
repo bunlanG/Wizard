@@ -32,6 +32,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -231,8 +232,8 @@ public class Wizard extends JDialog {
         return _pages.get(_currIndexPage);
     }
 
-    public Integer[] getPageIds() {
-        return (Integer[]) _pages.keySet().toArray();
+    public Set<Integer> getPageIds() {
+        return _pages.keySet();
     }
 
     protected void updateListeners() {
