@@ -3,6 +3,7 @@
 # compilated output dirs
 build/
 yaw4j.jar
+target/
 # log test
 log/
 
